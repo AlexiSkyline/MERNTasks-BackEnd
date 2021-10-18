@@ -1,0 +1,9 @@
+para reiniciar el servidor: npm i -D nodemon
+
+express : npm i express
+
+mongo : npm i mongoose
+
+dotenv: npm i dotenv
+
+npm run dev = para iniciarlo
