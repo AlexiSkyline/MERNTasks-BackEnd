@@ -6,4 +6,6 @@ mongo : npm i mongoose
 
 dotenv: npm i dotenv
 
+bcrypts : npm i bcryptjs
+
 npm run dev = para iniciarlo
