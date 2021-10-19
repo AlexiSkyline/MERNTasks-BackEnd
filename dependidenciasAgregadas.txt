@@ -10,4 +10,6 @@ bcrypts : npm i bcryptjs
 
 express-validator: npm i express-validator
 
+json web token: npm install jsonwebtoken
+
 npm run dev = para iniciarlo
