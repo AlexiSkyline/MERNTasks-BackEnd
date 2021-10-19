@@ -7,6 +7,9 @@ const app = express();
 // * Conectarnos A mongoDB
 conectarDB();
 
+// * Habilitar express.json
+app.use( express.json({ extended: true }) );
+
 // * Puerto de la App
 const PORT = process.env.PORT || 4000;
 
