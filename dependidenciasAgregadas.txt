@@ -8,4 +8,6 @@ dotenv: npm i dotenv
 
 bcrypts : npm i bcryptjs
 
+express-validator: npm i express-validator
+
 npm run dev = para iniciarlo
