@@ -7,7 +7,7 @@ const TareaSchema = mongoose.Schema({
         trim: true
     },
     estado: {
-        typeof: Boolean,
+        type: Boolean,
         default: false
     }, 
     creado: {
