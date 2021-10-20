@@ -15,13 +15,15 @@ exports.crearTarea = async ( req, res ) => {
         // * Extrae el proyecto y comprobar si exite
         const { proyecto } = req.body;
 
-        const isProyecto = await Proyecto.findById( proyecto );
-        if( !isProyecto ) {
+        const proyectoExiste = await Proyecto.findById( proyecto );
+
+        // * Revisa si la proyecto no existe
+        if( !proyectoExiste ) {
             return res.status(404).jso({ msg: 'Proyecto no encontrado' });
         }
 
         // * Revisa si el proyecto actual pertenece al usuario autenticado
-        if( isProyecto.creador.toString() !== req.usuario.id ) {
+        if( proyectoExiste.creador.toString() !== req.usuario.id ) {
             return res.status(401).json({ msg: 'No Autorizado' });
         }
 
@@ -43,13 +45,15 @@ exports.obtenerTareas = async( req, res ) => {
         // * Extrae el proyecto y comprobar si exite
         const { proyecto } = req.body;
 
-        const isProyecto = await Proyecto.findById( proyecto );
-        if( !isProyecto ) {
+        const proyectoExiste = await Proyecto.findById( proyecto );
+
+        // * Revisa si la proyecto no existe
+        if( !proyectoExiste ) {
             return res.status(404).jso({ msg: 'Proyecto no encontrado' });
         }
 
         // * Revisa si el proyecto actual pertenece al usuario autenticado
-        if( isProyecto.creador.toString() !== req.usuario.id ) {
+        if( proyectoExiste.creador.toString() !== req.usuario.id ) {
             return res.status(401).json({ msg: 'No Autorizado' });
         }
 
@@ -72,10 +76,12 @@ exports.actualizarTarea = async( req, res ) => {
         // * Si la tarea existe o no
         let tarea = await Tarea.findById( req.params.id );
 
+        // * Revisa si la tarea no existe
         if( !tarea ) {
             return res.status(404).json({ msg: 'No existe esa tarea' });
         }
 
+         //* Extraer el proyecto
         const proyectoExiste = await Proyecto.findById( proyecto );
         
         // * Revisa si el proyecto actual pertenece al usuario autenticado
@@ -89,7 +95,7 @@ exports.actualizarTarea = async( req, res ) => {
         if( nombre ) {
             nuevaTarea.nombre = nombre;
         }
-        
+
         if( estado ) {
             nuevaTarea.estado = estado;
         }
@@ -97,6 +103,38 @@ exports.actualizarTarea = async( req, res ) => {
         // * Guardar la tarea
         tarea = await Tarea.findByIdAndUpdate({ _id: req.params.id }, nuevaTarea, { new: true });
         res.json({ tarea });
+
+    } catch (error) {
+        console.log( error );
+        res.status(500).send( 'Hubo un error' );
+    }
+}
+
+// Todo: Eliminaos la tarea de un proyecto
+exports.eliminarTarea = async ( req, res ) => {
+    try {
+        // * Extrae el proyecto y comprobar si exite
+        const { proyecto } = req.body;
+
+        // * Si la tarea existe o no
+        let tarea = await Tarea.findById( req.params.id );
+
+        // * Revisa si la tarea no existe
+        if( !tarea ) {
+            return res.status(404).json({ msg: 'No existe esa tarea' });
+        }
+
+        //* Extraer el proyecto
+        const proyectoExiste = await Proyecto.findById( proyecto );
+        
+        // * Revisa si el proyecto actual pertenece al usuario autenticado
+        if( proyectoExiste.creador.toString() !== req.usuario.id ) {
+            return res.status(401).json({ msg: 'No Autorizado' });
+        }
+
+        // * Eliminar
+        await Tarea.findOneAndRemove({ _id: req.params.id });
+        res.json({ msg: 'Tarea Eliminada' });
 
     } catch (error) {
         console.log( error );
