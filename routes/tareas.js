@@ -4,8 +4,8 @@ const tareaController = require( '../controllers/tareaController' );
 const auth = require( '../middleware/auth' );
 const { check } = require( 'express-validator' );
 
-// Crear una tarea
-// api/tareas
+// * Crear una tarea
+// * api/tareas
 router.post( '/', 
     auth,
     [
@@ -15,4 +15,9 @@ router.post( '/',
     tareaController.crearTarea
 );
 
+// * Obtener tareas 
+router.get( '/',
+    auth, 
+    tareaController.obtenerTareas
+);
 module.exports = router;
