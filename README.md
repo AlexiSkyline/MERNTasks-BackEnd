@@ -4,5 +4,5 @@ Example of the MERN task project server using Express and MongoDB
 ## RUN
 npm run dev
 
-## ADD YOUR SECRET WORD
+## add information to your database
 add your mongo database user and password in variables.env
