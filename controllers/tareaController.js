@@ -19,7 +19,7 @@ exports.crearTarea = async ( req, res ) => {
 
         // * Revisa si la proyecto no existe
         if( !proyectoExiste ) {
-            return res.status(404).jso({ msg: 'Proyecto no encontrado' });
+            return res.status(404).json({ msg: 'Proyecto no encontrado' });
         }
 
         // * Revisa si el proyecto actual pertenece al usuario autenticado
@@ -43,13 +43,13 @@ exports.obtenerTareas = async( req, res ) => {
     
     try {
         // * Extrae el proyecto y comprobar si exite
-        const { proyecto } = req.body;
+        const { proyecto } = req.query;
 
         const proyectoExiste = await Proyecto.findById( proyecto );
 
         // * Revisa si la proyecto no existe
         if( !proyectoExiste ) {
-            return res.status(404).jso({ msg: 'Proyecto no encontrado' });
+            return res.status(404).json({ msg: 'Proyecto no encontrado' });
         }
 
         // * Revisa si el proyecto actual pertenece al usuario autenticado
@@ -58,7 +58,7 @@ exports.obtenerTareas = async( req, res ) => {
         }
 
         // * Obtener las tareas por proyecto
-        const tareas = await Tarea.find({ proyecto });
+        const tareas = await Tarea.find({ proyecto }).sort({ creado: -1 });
         res.json({ tareas });
     } catch (error) {
         console.log( error );
@@ -92,13 +92,8 @@ exports.actualizarTarea = async( req, res ) => {
         // * Crear un objeto con la nueva información
         const nuevaTarea = {};
 
-        if( nombre ) {
-            nuevaTarea.nombre = nombre;
-        }
-
-        if( estado ) {
-            nuevaTarea.estado = estado;
-        }
+        nuevaTarea.nombre = nombre;
+        nuevaTarea.estado = estado;
 
         // * Guardar la tarea
         tarea = await Tarea.findByIdAndUpdate({ _id: req.params.id }, nuevaTarea, { new: true });
@@ -114,7 +109,7 @@ exports.actualizarTarea = async( req, res ) => {
 exports.eliminarTarea = async ( req, res ) => {
     try {
         // * Extrae el proyecto y comprobar si exite
-        const { proyecto } = req.body;
+        const { proyecto } = req.query;
 
         // * Si la tarea existe o no
         let tarea = await Tarea.findById( req.params.id );
